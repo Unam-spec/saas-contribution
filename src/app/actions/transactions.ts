@@ -28,25 +28,26 @@ import type { ApiResponse, Transaction } from "@/types";
 // ─── Create ───────────────────────────────────────────────────────────────────
 
 export async function createTransaction(
-  formData: FormData
+  formData: FormData,
 ): Promise<ApiResponse<Transaction>> {
   const { userId } = await auth();
   if (!userId) return { success: false, error: "Unauthorized" };
 
   // Rate limit check
   const { success: allowed } = await transactionRateLimit.limit(userId);
-  if (!allowed) return { success: false, error: "Too many requests. Please slow down." };
+  if (!allowed)
+    return { success: false, error: "Too many requests. Please slow down." };
 
   // Validate
   const raw = {
-    date:   formData.get("date") as string,
-    payee:  formData.get("payee") as string,
+    date: formData.get("date") as string,
+    payee: formData.get("payee") as string,
     amount: formData.get("amount") as string,
-    memo:   formData.get("memo") as string,
+    memo: formData.get("memo") as string,
   };
   const parsed = transactionSchema.safeParse(raw);
   if (!parsed.success) {
-    const messages = parsed.error.errors.map((e) => e.message).join(", ");
+    const messages = parsed.error.issues.map((e) => e.message).join(", ");
     return { success: false, error: messages };
   }
 
@@ -68,7 +69,9 @@ export async function createTransaction(
     const user = await currentUser();
     const email = user?.emailAddresses?.[0]?.emailAddress;
     if (email) await sendTransactionReceipt(email, data as Transaction);
-  } catch { /* email failure is non-critical */ }
+  } catch {
+    /* email failure is non-critical */
+  }
 
   await invalidateDashboardCache(userId);
   await trackServerEvent(userId, Events.TRANSACTION_ADDED, {
@@ -86,20 +89,20 @@ export async function createTransaction(
 
 export async function updateTransaction(
   id: string,
-  formData: FormData
+  formData: FormData,
 ): Promise<ApiResponse<Transaction>> {
   const { userId } = await auth();
   if (!userId) return { success: false, error: "Unauthorized" };
 
   const raw = {
-    date:   formData.get("date") as string,
-    payee:  formData.get("payee") as string,
+    date: formData.get("date") as string,
+    payee: formData.get("payee") as string,
     amount: formData.get("amount") as string,
-    memo:   formData.get("memo") as string,
+    memo: formData.get("memo") as string,
   };
   const parsed = transactionSchema.safeParse(raw);
   if (!parsed.success) {
-    const messages = parsed.error.errors.map((e) => e.message).join(", ");
+    const messages = parsed.error.issues.map((e) => e.message).join(", ");
     return { success: false, error: messages };
   }
 
@@ -110,7 +113,13 @@ export async function updateTransaction(
   // RLS ensures only the owner can update (user_id = auth.uid())
   const { data, error } = await supabase
     .from("transactions")
-    .update({ date, payee, amount: amountCents, memo, updated_at: new Date().toISOString() })
+    .update({
+      date,
+      payee,
+      amount: amountCents,
+      memo,
+      updated_at: new Date().toISOString(),
+    })
     .eq("id", id)
     .eq("user_id", userId)
     .select()
@@ -129,7 +138,9 @@ export async function updateTransaction(
 
 // ─── Delete ───────────────────────────────────────────────────────────────────
 
-export async function deleteTransaction(id: string): Promise<ApiResponse<null>> {
+export async function deleteTransaction(
+  id: string,
+): Promise<ApiResponse<null>> {
   const { userId } = await auth();
   if (!userId) return { success: false, error: "Unauthorized" };
 
@@ -153,7 +164,9 @@ export async function deleteTransaction(id: string): Promise<ApiResponse<null>> 
 
 // ─── Fetch all for PDF export ─────────────────────────────────────────────────
 
-export async function fetchAllTransactions(): Promise<ApiResponse<Transaction[]>> {
+export async function fetchAllTransactions(): Promise<
+  ApiResponse<Transaction[]>
+> {
   const { userId } = await auth();
   if (!userId) return { success: false, error: "Unauthorized" };
 

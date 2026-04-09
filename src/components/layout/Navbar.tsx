@@ -10,8 +10,8 @@ import { UserButton } from "@clerk/nextjs";
 import { Menu, X, BarChart2, List } from "lucide-react";
 
 const navLinks = [
-  { href: "/dashboard",     label: "Dashboard",    icon: BarChart2 },
-  { href: "/transactions",  label: "Transactions", icon: List },
+  { href: "/dashboard", label: "Dashboard", icon: BarChart2 },
+  { href: "/transactions", label: "Transactions", icon: List },
 ];
 
 export default function Navbar() {
@@ -25,7 +25,7 @@ export default function Navbar() {
           Contribution Tracker
         </span>
         <div className="flex items-center gap-4">
-          <UserButton afterSignOutUrl="/" />
+          <UserButton />
           <button
             onClick={() => setOpen(true)}
             className="flex flex-col gap-1.5 p-1.5 rounded hover:bg-white/10 transition-colors"
@@ -39,7 +39,10 @@ export default function Navbar() {
       {/* Overlay */}
       {open && (
         <div className="fixed inset-0 z-[200]">
-          <div className="absolute inset-0 bg-black/50" onClick={() => setOpen(false)} />
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setOpen(false)}
+          />
           <div className="absolute right-0 top-0 h-full w-56 bg-[#1a1612] flex flex-col pt-4">
             <button
               onClick={() => setOpen(false)}
@@ -53,9 +56,10 @@ export default function Navbar() {
                 href={href}
                 onClick={() => setOpen(false)}
                 className={`flex items-center gap-3 px-6 py-3 font-playfair text-base border-b border-white/10 transition-all
-                  ${pathname.startsWith(href)
-                    ? "text-[#c4a35a] pl-8"
-                    : "text-[#e5ddd0] hover:text-[#c4a35a] hover:pl-8"
+                  ${
+                    pathname.startsWith(href)
+                      ? "text-[#c4a35a] pl-8"
+                      : "text-[#e5ddd0] hover:text-[#c4a35a] hover:pl-8"
                   }`}
               >
                 <Icon size={16} />

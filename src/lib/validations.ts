@@ -26,12 +26,15 @@ export const transactionSchema = z.object({
   amount: z
     .string()
     .min(1, "Amount is required")
-    .refine(isValidMoneyString, "Amount must be a positive number (e.g. 150.00)"),
+    .refine(
+      isValidMoneyString,
+      "Amount must be a positive number (e.g. 150.00)",
+    ),
 
   memo: z
     .string()
     .max(500, "Memo is too long")
-    .optional()
+    .nullable()
     .transform((s) => s?.trim() || null),
 });
 

@@ -31,7 +31,9 @@ export default async function TransactionsPage() {
     <div>
       <div className="flex items-baseline gap-3 border-b border-[#d5c9b5] pb-3 mb-6">
         <h1 className="text-3xl font-playfair">Transactions</h1>
-        <span className="font-mono text-xs text-[#8a8480] tracking-widest uppercase">Ledger</span>
+        <span className="font-mono text-xs text-[#8a8480] tracking-widest uppercase">
+          Ledger
+        </span>
       </div>
       <TransactionManager initialTransactions={(data ?? []) as Transaction[]} />
     </div>

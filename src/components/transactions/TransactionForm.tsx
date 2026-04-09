@@ -21,7 +21,13 @@ interface Props {
   isPending: boolean;
 }
 
-export default function TransactionForm({ editTarget, onSubmit, onClear, error, isPending }: Props) {
+export default function TransactionForm({
+  editTarget,
+  onSubmit,
+  onClear,
+  error,
+  isPending,
+}: Props) {
   const isEditing = editTarget !== null;
 
   const {
@@ -32,16 +38,16 @@ export default function TransactionForm({ editTarget, onSubmit, onClear, error, 
     formState: { errors },
   } = useForm<TransactionInput>({
     resolver: zodResolver(transactionSchema),
-    defaultValues: { date: "", payee: "", amount: "", memo: "" },
+    defaultValues: { date: "", payee: "", amount: "", memo: null },
   });
 
   // Populate form when entering edit mode
   useEffect(() => {
     if (editTarget) {
-      setValue("date",   editTarget.date);
-      setValue("payee",  editTarget.payee);
+      setValue("date", editTarget.date);
+      setValue("payee", editTarget.payee);
       setValue("amount", centsToInputString(editTarget.amount));
-      setValue("memo",   editTarget.memo ?? "");
+      setValue("memo", editTarget.memo ?? "");
     } else {
       reset();
     }
@@ -54,10 +60,10 @@ export default function TransactionForm({ editTarget, onSubmit, onClear, error, 
 
   const handleFormSubmit = (data: TransactionInput) => {
     const fd = new FormData();
-    fd.append("date",   data.date);
-    fd.append("payee",  data.payee);
+    fd.append("date", data.date);
+    fd.append("payee", data.payee);
     fd.append("amount", data.amount);
-    fd.append("memo",   data.memo ?? "");
+    fd.append("memo", data.memo ?? "");
     onSubmit(fd);
     if (!isEditing) reset();
   };
@@ -80,7 +86,9 @@ export default function TransactionForm({ editTarget, onSubmit, onClear, error, 
             className="w-full px-3 py-2 border border-[#d5c9b5] rounded bg-[#f9f6f0] text-[#1a1612]
                        focus:outline-none focus:border-[#9a7c3a] focus:bg-white transition-colors text-sm"
           />
-          {errors.date && <p className="text-red-600 text-xs mt-1">{errors.date.message}</p>}
+          {errors.date && (
+            <p className="text-red-600 text-xs mt-1">{errors.date.message}</p>
+          )}
         </div>
 
         {/* Payee */}
@@ -95,7 +103,9 @@ export default function TransactionForm({ editTarget, onSubmit, onClear, error, 
             className="w-full px-3 py-2 border border-[#d5c9b5] rounded bg-[#f9f6f0] text-[#1a1612]
                        focus:outline-none focus:border-[#9a7c3a] focus:bg-white transition-colors text-sm"
           />
-          {errors.payee && <p className="text-red-600 text-xs mt-1">{errors.payee.message}</p>}
+          {errors.payee && (
+            <p className="text-red-600 text-xs mt-1">{errors.payee.message}</p>
+          )}
         </div>
 
         {/* Amount */}
@@ -111,7 +121,9 @@ export default function TransactionForm({ editTarget, onSubmit, onClear, error, 
             className="w-full px-3 py-2 border border-[#d5c9b5] rounded bg-[#f9f6f0] text-[#1a1612]
                        focus:outline-none focus:border-[#9a7c3a] focus:bg-white transition-colors text-sm font-mono"
           />
-          {errors.amount && <p className="text-red-600 text-xs mt-1">{errors.amount.message}</p>}
+          {errors.amount && (
+            <p className="text-red-600 text-xs mt-1">{errors.amount.message}</p>
+          )}
         </div>
 
         {/* Memo */}
@@ -126,7 +138,9 @@ export default function TransactionForm({ editTarget, onSubmit, onClear, error, 
             className="w-full px-3 py-2 border border-[#d5c9b5] rounded bg-[#f9f6f0] text-[#1a1612]
                        focus:outline-none focus:border-[#9a7c3a] focus:bg-white transition-colors text-sm resize-y"
           />
-          {errors.memo && <p className="text-red-600 text-xs mt-1">{errors.memo.message}</p>}
+          {errors.memo && (
+            <p className="text-red-600 text-xs mt-1">{errors.memo.message}</p>
+          )}
         </div>
 
         {/* Server-level error */}

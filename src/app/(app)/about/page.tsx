@@ -2,8 +2,7 @@
  * app/(app)/about/page.tsx
  */
 import Link from "next/link";
-import { Github, Twitter, Linkedin } from "lucide-react";
-
+import { GitFork, X, ExternalLink } from "lucide-react";
 export default function AboutPage() {
   return (
     <div className="max-w-lg mx-auto text-center py-16">
@@ -20,9 +19,13 @@ export default function AboutPage() {
 
       <div className="flex justify-center gap-3 flex-wrap">
         {[
-          { href: "https://github.com", label: "GitHub", Icon: Github },
-          { href: "https://twitter.com", label: "Twitter / X", Icon: Twitter },
-          { href: "https://linkedin.com", label: "LinkedIn", Icon: Linkedin },
+          { href: "https://github.com", label: "GitHub", Icon: GitFork },
+          { href: "https://twitter.com", label: "Twitter / X", Icon: X },
+          {
+            href: "https://linkedin.com",
+            label: "LinkedIn",
+            Icon: ExternalLink,
+          },
         ].map(({ href, label, Icon }) => (
           <a
             key={label}
@@ -40,7 +43,10 @@ export default function AboutPage() {
       </div>
 
       <div className="mt-10 pt-6 border-t border-[#d5c9b5]">
-        <Link href="/dashboard" className="text-sm text-[#9a7c3a] hover:underline">
+        <Link
+          href="/dashboard"
+          className="text-sm text-[#9a7c3a] hover:underline"
+        >
           ← Back to Dashboard
         </Link>
       </div>

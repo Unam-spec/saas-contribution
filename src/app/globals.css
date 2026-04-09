@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink:    #1a1612;
+  --ink2:   #4a4540;
+  --ink3:   #8a8480;
+  --cream:  #f9f6f0;
+  --cream2: #f0ebe0;
+  --cream3: #e5ddd0;
+  --gold:   #9a7c3a;
+  --gold2:  #c4a35a;
+  --gold3:  #e8d5a8;
+  --danger: #a33333;
+  --success:#2a6a3a;
+}
+
+body {
+  font-family: var(--font-inter), Georgia, serif;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-playfair), Georgia, serif;
+}
